@@ -1,5 +1,3 @@
-# Musical Sentiment Analysis
-Group 24: James Jiang, Sierra Olson, Imanuel Sonubi, Viviana Osorio
 
 ## Introduction
 Music drives our lives by setting a narrative tone. From Hollywood productions to a regular Tuesday, music has the power to govern our mindset. Composers and artists have an arsenal of tools to convey their art to their listeners. The most obvious of which is lyrical, however instrumentals are the unspoken heros. Our group will look at instrumental features (such as tempo, rhythm, musical key, etc) to determine relationships between music and human emotions.
