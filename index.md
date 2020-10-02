@@ -6,8 +6,8 @@ Music drives our lives by setting a narrative tone. From Hollywood productions t
 
 ## Data
 We plan to look at the following datasets (and will consider more if needed).
-- [Spotify Tracks API][https://developer.spotify.com/documentation/web-api/reference/tracks/get-audio-analysis/]
-- [Million Song Dataset][http://millionsongdataset.com/]
+- [Spotify Tracks API](https://developer.spotify.com/documentation/web-api/reference/tracks/get-audio-analysis/)
+- [Million Song Dataset](http://millionsongdataset.com/)
 
 What we can expect from these datasets are measures of features of a certain track such as valence (the positivity or a song) or arousal(energy of a song). The following is a snippet from Spotify's Track API Audio Analysis tool.
 
@@ -52,6 +52,6 @@ Our applications could stretch far beyond just songs however. We could apply our
 Currently our project only looks at the instrumentals but for the next steps in creating a more effective model would include incorporating lyrical analysis. This could help solidfy our results and also account for our "musical sarcasm" problem of positive instrumentals with negative lyrics.
 
 ## References
-- [Machine Recognition of Music Emotion: A Review][https://www.researchgate.net/publication/254004106_Machine_Recognition_of_Music_Emotion_A_Review]
-- [Applying Data Mining for Sentiment Analysis in Music][https://www.researchgate.net/publication/318510880_Applying_Data_Mining_for_Sentiment_Analysis_in_Music]
-- [Modeling Music Emotion Judgments Using Machine Learning Methods][https://www.frontiersin.org/articles/10.3389/fpsyg.2017.02239/full]
+- [Machine Recognition of Music Emotion: A Review](https://www.researchgate.net/publication/254004106_Machine_Recognition_of_Music_Emotion_A_Review)
+- [Applying Data Mining for Sentiment Analysis in Music](https://www.researchgate.net/publication/318510880_Applying_Data_Mining_for_Sentiment_Analysis_in_Music)
+- [Modeling Music Emotion Judgments Using Machine Learning Methods](https://www.frontiersin.org/articles/10.3389/fpsyg.2017.02239/full)
