@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<h1>Music Sentiment Analysis</h1>
+ <p>James Jiang | Imanuel Sunobi | Sierra Olson | Viviana Osorio</p>
+ <p>Team 28</p>
+ <P>November 6, 2020</P>
+
+
+
+
+<h2>Objective</h2>
+  <p>
+    The project objective is to relate instrumental elements of music
+    with the emotions they convey, providing a breakdown of the emotional
+    composition of a set of music samples. In the past, this is accomplished using
+    lyrics. Instead, we emphasize the importance of instrumental elements
+    in the emotion a musical piece conveys. These elements include timbre,
+    rhythm, melody, valence, arousal, and musical key.
+  </p>
+<h2>Motivation</h2>
+  <p>
+    Music drives our lives by setting a narrative tone.
+    From Hollywood productions to a regular Tuesday, music has the power
+    to govern our mindset. Offering a better, new approach in musical grouping is
+    useful to those who enjoy music by mood, or those who seek a better
+    understanding of the music they are consume and how it may affect
+    their mood.
+
+    Today, music sentiment analysis is typically done by evaluating
+    lyrical composition. Lyrics are only one part of a song, thus limiting.
+    Lyrics can also be tricky as they can convey sarcasm and words
+    that are in our vernacular. For example, "sick" could be interpreted
+    as "awesome" in pop culture instead of the dictionary definition of
+    "ill".
+  </p>
+<h2>Risks and Challenges</h2>
+  <p>
+    The largest, and unresolved, challenge we have met thus far is
+    establishing a ground truth to an injerently subjective dataset.
+    Originally, we planned to utilize crowd sourcing by administering
+    a questionnaire asking participants to rank different instrumental
+    elements of a song.
+  </p>
+<h2>Data</h2>
+  <p>
+    The employed dataset is a cleaned pull from the Spotify API.
+    Spotify is the second most popular music streaming service in the
+    United States. This dataset is composed of over 160,000 songs and
+    details 14 instrumental features for each record.
+
+    Of the 14, we will include 9 in our study. The features are
+    as follows : Key, Acousticcness, Danceability, Energy,
+    Instrumentalness,Loudness, Speachiness, Valence, and Tempo.
+
+    Due to musical styles changing with time, records with a creation
+    date from 2000 onwards were included in the final dataset, resulting
+    in 40,000 records.
+  </p>
+<h2>Data Exploration</h2>
+  <h3>Valence and Energy</h3>
+  <p>
+    The first attempt in finding a relationship between a record's musical
+    elements and its emotional properties was <br> experimentation with the
+    valence and energy features. Valence describes the musical positiveness
+    conveyed by a track.<br> Tracks with high valence sound more positive,
+    while tracks with low valence sound more negative.Energy represents a <br>perceptual
+    measure of intensity and activity. Energetic tracks feel fast, loud, and noisy.
+    We sought a relationship between <br>these features to find a "definition" of what
+    positive and negative songs are. We expected for arousal and valence to be<br>
+    positively correlated. When plotted against each other, there did not
+    noticeable clusters were not present. However, there<br> seems to be density present
+    along the positive diagonal, i.e. most songs seem to match their valence and energy levels.
+  <p>
+  <h3>Unsupervised Learning</h3>
+  <p>
+    K-means is a popular unsupervised clustering algorithm. In using K-means clustering
+    on our data, we expected clusters to associate varying values of the features
+    with one another. Then, we expected to listen to different songs within a cluster
+    and experience a similar emotional reaction. During this trial, 13 out of 19
+    features from the dataset were used. They are as follows: Acousticness, danceability, energy,
+    explicit, instrumental, key, liveness, loudness, mode, speechiness, tempo,
+    valence, year(2000-2020). We used principal component analysis (PCA)
+    to eliminate highly correlated variables.  However, our result was very strange
+    and different than previously exposed to. K-means clustering did not result in
+    discernable circular clustering regions. It resulted in long, vertical clusters.
+    We have not completely ruled out k-means as our unsupervised learning algorithm,
+    despite a strange result. It is possible that the grouping mechanism requires
+    further analysis.
+
+
+    Next, we performed DBScan to find clusters based on density. DBScan is a good choice
+    as we had a plethora of data points that might not necessarily cluster to specific shapes.
+    We normalized features that did not have a range between 0 and 1, such as tempo. The pre-scaling and
+    post-scaling PCA results showed an improvement on reducing the bias to one primary component.
+    Our results still surprised us as we observed identical cluster shapes stacked
+    on top of one another like a sequence of stripes. The clusters formed represent the
+    different keys on the pitch class notation scale.
+  </p>
+
+<h2>Challenges</h2>
+<p>
+  From our results we have forseen some challenges and concerns with our current approaches.
+
+  First of which involves the representation of data from our dataset.
+  Some features such as valence and energy are continuous and between 0 and 1 while key ranges from
+  0-11 (real numbers). We may consult music professionals to group similar keys together
+  and use encoding.
+
+  We also are considering how music can convey multiple feelings and thus are
+  considering employing GMM and soft clustering.
+
+<h2>Next Steps</h2>
+  <p>
+    From the graphs, it is evident the musical key feature is causing strange grouping.
+    Now, we remove the musical key feature or divide keys into "sad" and "happy" keys,
+    by the advice of a musical professional.
+  </p>
+
+</body>
+</html>
