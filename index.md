@@ -3,6 +3,11 @@
 ## Introduction
 Music drives our lives by setting a narrative tone. From Hollywood productions to a regular Tuesday, music has the power to govern our mindset. Composers and artists have an arsenal of tools to convey their art to their listeners, the most obvious of which are lyrics; however, instrumentals are the unspoken heroes. Our group will look at instrumental features (such as tempo, rhythm, musical key, etc.) to determine relationships between music and human emotions.
 
+## Objective
+The project objective is to relate instrumental elements of music with the emotions they convey, providing a breakdown of the emotional composition of a set of music samples. In the past, this is accomplished using lyrics. Instead, we emphasize the importance of instrumental elements in the emotion a musical piece conveys. These elements include timbre, rhythm, melody, valence, arousal, and musical key.
+
+# Touchpoint 2
+
 ## Data
 We plan to look at the following datasets (and will consider more if needed).
 - [Spotify Tracks API](https://developer.spotify.com/documentation/web-api/reference/tracks/get-audio-analysis/)
@@ -86,7 +91,21 @@ We see that the optimal number is between 6-8. From here, we plot the results of
 
 ![kmeans](./figures/kmeans_8.png)
 
-The results are somewhat promising but we decided to attempt GMM on the data.
+The results are somewhat promising but K-Means is not ideal as there are not any visible circular clusters, thus we decided to attempt DBScan and GMM on the data.
+
+### DBScan
+DBScan was also performed to see if it could give us more information compared to previous approaches. The most challenging part of DBScan we encountered was optimizing the eps value and min_components. The results from the clustering are show below.
+
+Results for all features:
+![dbscan_all](./figures/dbscan_all.png)
+
+Results for all features except key and mode:
+![dbscan_no_key_mode](./figures/dbscan_no_key_mode.png)
+
+Results for only energy vs valence:
+![dbscan_energy_valence](./figures/dbscan_energy_valence.png)
+
+Again, we see not significant conclusions so we decided to try our last clustering method, GMM.
 
 ### GMM
 Songs can convery multiple emotions and thus it was logical to apply soft-clustering to our problem. When applying GMM on our initial set of features, we see the following results.
@@ -101,30 +120,42 @@ This looks a lot better but we approach GMM again but only looking at **energy v
 
 ![gmm_all](./figures/gmm_energy_valence.png)
 
-### DBScan
-DBScan was also performed to see if it could give us more information compared to previous approaches. 
 
-WIP
-
-### Unsupervised Conclusion
+## Unsupervised Learning Results and Conclusion
 GMM seems to provide the most promising clustering (especially energy vs vaence) and would allow us to assign clusters to the following emotion circle.
 
 ![emotion_circle](./figures/emotion_circle.png)
 
 We generated csv files cooresponding to each cluster to verify any differences and assist in labeling. You can listen to examples of such below to see differences in musical emotion.
 
-![cluster0](./music_snippets/cluster0.mp3)
 
-![cluster1](.mp4)
+### Music Cluster Snippets
+The following clips are used for educational purposes. The following links will correspond to snippets of music from songs found in respective clusters on Google drive.
 
-![cluster2](.mp4)
+[Cluster 0 Song Clip](https://drive.google.com/file/d/17mtqN4uOsIIy5JJNEc4943LtqLBx-DgY/view?usp=sharing)
 
-![cluster3](.mp4)
+[Cluster 2 Song Clip](https://drive.google.com/file/d/1mLX2YiOUhb-GoJeijT-tsb-nq0JlQP6e/view?usp=sharing)
 
-![cluster4](.mp4)
+[Cluster 4 Song Clip](https://drive.google.com/file/d/13Tnl24dhBc-84y9RafF0DeNfhRGfBF6m/view?usp=sharing)
 
-![cluster5](.mp4)
+[Cluster 6 Song Clip](https://drive.google.com/file/d/1Rye5-_d4DlLFIFBBp43qqlGRy2FqwJIC/view?usp=sharing)
 
+[Cluster 8 Song Clip](https://drive.google.com/file/d/1vnPJs-GrFQh28fpdZ5_xV0NWWRE0xBr9/view?usp=sharing)
+
+[Cluster 10 Song Clip0](https://drive.google.com/file/d/1yODw4yaGGe29XYh9CVfDcEE6zGCkMcit/view?usp=sharing)
+
+
+### Discussion
+The results are promising as when listening to the music clips, we observe distinct differences in moods (subjectively) as a team. It is interesting to note that when looking at simply energy and valence plotted without clustering...
+
+![energy_vs_valence](figures/e_vs_v.png)
+
+We see density along the positive diagonal noting that songs tend to match their levels and not too many songs are created with unique profiles as outliers. From here, we will label our clusters with a general emotion which will assist in our supervised learning portion.
+
+### Supervised Learning Plans KNN Classification
+The unsupervised portion of our project will play an important role in determining labels for our supervised algorithm. We plan on using KNN Classification to determine what emotions an unknown song conveys.
+
+With our unsupervised results, we can set a ground truth for our dataset. Our plan will be to run our GMM model on the whole dataset and train our Supervised model on half of this dataset. We will use the other half as testing data and since we have labels for the entire dataset, we can easily confirm our results.
 
 # Touchpoint 1 Items
 The items below are for touchpoint 1, some may still be applicable but the content above reports on the midterm progress
