@@ -96,13 +96,14 @@ The results are somewhat promising but K-Means is not ideal as there are not any
 ### DBScan
 DBScan was also performed to see if it could give us more information compared to previous approaches. The most challenging part of DBScan we encountered was optimizing the eps value and min_components. The results from the clustering are show below.
 
-Results for all features:
+Results for all features:<br>
+
 ![dbscan_all](./figures/dbscan_all.png)
 
-Results for all features except key and mode:
+Results for all features except key and mode:<br>
 ![dbscan_no_key_mode](./figures/dbscan_no_key_mode.png)
 
-Results for only energy vs valence:
+Results for only energy vs valence:<br>
 ![dbscan_energy_valence](./figures/dbscan_energy_valence.png)
 
 Again, we see not significant conclusions so we decided to try our last clustering method, GMM.
