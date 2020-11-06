@@ -113,7 +113,7 @@ GMM seems to provide the most promising clustering (especially energy vs vaence)
 
 We generated csv files cooresponding to each cluster to verify any differences and assist in labeling. You can listen to examples of such below to see differences in musical emotion.
 
-![cluster0](./music_snippets/cluster0.aifc)
+![cluster0](./music_snippets/cluster0.mp3)
 
 ![cluster1](.mp4)
 
