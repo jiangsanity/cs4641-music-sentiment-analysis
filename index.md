@@ -63,18 +63,6 @@ After PCA was performing on 2 primary components, the variances are as such.
 
 ![post-pca-variance](./figures/post_pca_all_variances.png)
 
-## Planned Methods and Algorithms
-We plan on using both unsupervised and supervised algorithms to reveal the relationship between songs and emotions.
-### Unsupervised - GMM Clustering
-GMM Clustering will be used on datasets to cluster closely related emotional activations of songs. We will start out with general properties such as "happy" or "sad" but will expand out clusters to encapsulate more emotions.
-
-### Supervised - KNN Classification
-The unsupervised portion of our project will play an important role in determining labels for our supervised algorithm. We plan on using KNN Classification to determine what emotions an unknown song conveys.
-
-## Expected Results
-The goal of our project is to be able to accurately associate songs to certain emotions that span multiple levels of intensity from calming to exciting, sleepy to energetic, and positive to negative. This will help confirm correlations we see between musical features and emotions, such as minor key songs being generally more negative and high rhythm songs as more energetic. We also hope to see if performing sentiment analysis on instrumental features are more accurate than performing lyrical analysis.
-
-
 ## Unsupervised Algorithm Results
 We approached our data from multiple clustering techniques such as K-means, DBScan, and GMM.
 
@@ -112,7 +100,34 @@ GMM seems to provide the most promising clustering (especially energy vs vaence)
 
 ![emotion_circle](./figures/emotion_circle.png)
 
-We generated csv files cooresponding to each cluster to verify any differences and assist in labeling. 
+We generated csv files cooresponding to each cluster to verify any differences and assist in labeling. You can listen to examples of such below to see differences in musical emotion.
+
+![cluster0](.mp4)
+
+![cluster1](.mp4)
+
+![cluster2](.mp4)
+
+![cluster3](.mp4)
+
+![cluster4](.mp4)
+
+![cluster5](.mp4)
+
+
+# Touchpoint 1 Items
+The items below are for touchpoint 1, some may still be applicable but the content above reports on the midterm progress
+
+## Planned Methods and Algorithms
+We plan on using both unsupervised and supervised algorithms to reveal the relationship between songs and emotions.
+### Unsupervised - GMM Clustering
+GMM Clustering will be used on datasets to cluster closely related emotional activations of songs. We will start out with general properties such as "happy" or "sad" but will expand out clusters to encapsulate more emotions.
+
+### Supervised - KNN Classification
+The unsupervised portion of our project will play an important role in determining labels for our supervised algorithm. We plan on using KNN Classification to determine what emotions an unknown song conveys.
+
+## Expected Results
+The goal of our project is to be able to accurately associate songs to certain emotions that span multiple levels of intensity from calming to exciting, sleepy to energetic, and positive to negative. This will help confirm correlations we see between musical features and emotions, such as minor key songs being generally more negative and high rhythm songs as more energetic. We also hope to see if performing sentiment analysis on instrumental features are more accurate than performing lyrical analysis.
 
 ## Discussion
 The best outcome is having a model that is able to measure levels of emotions given a certain song or playlist. We can then use our model to evaluate how accurate current music streaming platform playlists are. For example, Spotify and Apple Music both have pregenerated platform playlists for workouts and studying. We could evaluate how successful these platforms are at creating their playlists and potentially suggest removal/additions to increase a playlist's performance. Our tool could also be utlizied to analyze personal/community generated playlist.
