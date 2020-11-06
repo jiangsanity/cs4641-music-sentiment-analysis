@@ -32,6 +32,8 @@ What we can expect from these datasets are measures of features of a certain tra
   "type" : "audio_features"
 }
 ```
+The employed dataset is a cleaned pull from the Spotify API. Spotify is the second most popular music streaming service in the United States. This dataset is composed of over 160,000 songs and details 14 instrumental features for each record. Of the 14, we will include 9 in our study. The features are as follows : Key, Acousticcness, Danceability, Energy, Instrumentalness,Loudness, Speachiness, Valence, and Tempo. Due to musical styles changing with time, records with a creation date from 2000 onwards were included in the final dataset, resulting in 40,000 records.
+
 ### Selected Features
 We will consider only the following features as song features (such as artist/year) will be irrelevant to the analysis based on musical features.
 
@@ -53,6 +55,15 @@ For a full descrption of what each feature represents, visit the Spotify documen
 We believe that *key* and *mode* will be crucial as the major/minor key heavily impacts the mood of a song. 
 
 Some concerns arise when selecting our features however. For example, mode is a binar value, key is a value from 0-14, and items such as valence are 0-1 continuously. We also worry that some of the meausre, such as energy, are generated from other features such as loudness and tempo. However, this shold be handled by performing PCA.
+
+### Valence vs Energy
+The first attempt in finding a relationship between a record's musical elements and its emotional properties was
+experimentation with the valence and energy features. Valence describes the musical positiveness conveyed by a track.
+Tracks with high valence sound more positive, while tracks with low valence sound more negative.Energy represents a
+perceptual measure of intensity and activity. Energetic tracks feel fast, loud, and noisy. We sought a relationship between
+these features to find a "definition" of what positive and negative songs are. We expected for arousal and valence to be
+positively correlated. When plotted against each other, there did not noticeable clusters were not present. However, there
+seems to be density present along the positive diagonal, i.e. most songs seem to match their valence and energy levels.
 
 ### Performing PCA
 Before performing PCA, the variances plotted across the dataset is represented by the following chart. 
@@ -102,7 +113,7 @@ GMM seems to provide the most promising clustering (especially energy vs vaence)
 
 We generated csv files cooresponding to each cluster to verify any differences and assist in labeling. You can listen to examples of such below to see differences in musical emotion.
 
-![cluster0](.mp4)
+![cluster0](./music_snippets/cluster0.aifc)
 
 ![cluster1](.mp4)
 
