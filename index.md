@@ -37,10 +37,10 @@ What we can expect from these datasets are measures of features of a certain tra
   "type" : "audio_features"
 }
 ```
-The employed dataset is a cleaned pull from the Spotify API. Spotify is the second most popular music streaming service in the United States. This dataset is composed of over 160,000 songs and details 14 instrumental features for each record. Of the 14, we will include 9 in our study. The features are as follows : Key, Acousticcness, Danceability, Energy, Instrumentalness,Loudness, Speachiness, Valence, and Tempo. Due to musical styles changing with time, records with a creation date from 2000 onwards were included in the final dataset, resulting in 40,000 records.
+The dataset is a cleaned pull of songs from the Spotify Audio Feature API. Spotify is the second most popular music streaming service in the United States. This dataset is composed of over 160,000 songs and details 14 instrumental features for each record such as key, danceability, energy, and more. Due to musical styles changing with time, records with a creation date from 2000 onwards were included in the final dataset, resulting in 40,000 records.
 
 ### Selected Features
-We will consider only the following features as song features (such as artist/year) will be irrelevant to the analysis based on musical features.
+We looked through the features and picked out the ones we wanted to use for our exploration. Features like name or year of the song were not chosen for obvious reasons. For other features, such as instrumentalness or speechiness, we read the Spotify API descriptions for and felt wouldn't really contribute much in terms of sentiment, so we decided to leave those out as well. We ended up with the following 8 features:
 
 ```
 selected_features = [
@@ -55,29 +55,38 @@ selected_features = [
 ]
 ```
 
-For a full descrption of what each feature represents, visit the Spotify documentation [here](https://developer.spotify.com/documentation/web-api/reference/tracks/get-audio-features/).
+For a full description of what each feature represents, visit the Spotify documentation [here](https://developer.spotify.com/documentation/web-api/reference/tracks/get-audio-features/).
 
 We believe that *key* and *mode* will be crucial as the major/minor key heavily impacts the mood of a song. 
 
-Some concerns arise when selecting our features however. For example, mode is a binar value, key is a value from 0-14, and items such as valence are 0-1 continuously. We also worry that some of the meausre, such as energy, are generated from other features such as loudness and tempo. However, this shold be handled by performing PCA.
+A few concerns arose when selecting our features.
 
-### Valence vs Energy
+Some features had different ranges. For example, features like energy and valence ranged from 0-1, while tempo and loudness ranged from 0 to 240 and -60 to 0, respectively. We made sure to scale the features to a common range to account for this.
+
+Some features were discrete. For example, mode is a binary value (0 or 1 for minor or major), key is a value from 0-11 (representing each pitch class), and items such as valence are continuous values from 0-1. We decided to try our clustering with these mixed types anyway to see if they would help produce clean clusters.
+
+We also worried that some of the features, such as energy, somewhat overlapped with other features such as loudness and tempo. We decided to include them anyway, as we figured it may help add additional information when transforming the feature space with PCA.
+
+### Plotting Valence vs Energy
 The first attempt in finding a relationship between a record's musical elements and its emotional properties was
-experimentation with the valence and energy features. Valence describes the musical positiveness conveyed by a track.
-Tracks with high valence sound more positive, while tracks with low valence sound more negative.Energy represents a
+experimentation with the valence and energy features. Valence describes the musical positivity conveyed by a track.
+Tracks with high valence sound more positive, while tracks with low valence sound more negative. Energy represents a
 perceptual measure of intensity and activity. Energetic tracks feel fast, loud, and noisy. We sought a relationship between
-these features to find a "definition" of what positive and negative songs are. We expected for arousal and valence to be
-positively correlated. When plotted against each other, there did not noticeable clusters were not present. However, there
-seems to be density present along the positive diagonal, i.e. most songs seem to match their valence and energy levels.
+these features to find a "definition" of what positive and negative songs are. We expected for energy and valence to be
+positively correlated, and when plotted against each other, we did see what seemed to be a positive correlation (songs with high valence also had high energy). We returned to this later to do clustering on.
 
 ### Performing PCA
-Before performing PCA, the variances plotted across the dataset is represented by the following chart. 
+With 8 features, our data would have been hard to visualize and analyze, so we decided to try using PCA on our dataset to reduce the number of dimensions while hopefully capturing the important variation within our data. We used 70k datapoints for this. This is a bar graph of the % of variance explained by each principal component, *without scaling the data first*:
 
 ![pre-pca-variance](./figures/pre_pca_all_variances.png)
 
-After PCA was performing on 2 primary components, the variances are as such.
+We can see an imbalance in variance explained. This is probably due to the fact that tempo, one of the 8 features, ranged from 0-240, while most of the other features ranged from 0-1. The tempo feature's large variance contributes a lot to that first principal component and skews the graph quite a bit.
+
+After we scaled the data, here is what the % of explained variances looked like:
 
 ![post-pca-variance](./figures/post_pca_all_variances.png)
+
+With all of the features on a common scale, the graph looks a bit more balanced. We took the top two principal components when graphing most of the graphs below.
 
 ## Unsupervised Algorithm Results
 We approached our data from multiple clustering techniques such as K-means, DBScan, and GMM.
@@ -94,40 +103,42 @@ We see that the optimal number is between 6-8. From here, we plot the results of
 The results are somewhat promising but K-Means is not ideal as there are not any visible circular clusters, thus we decided to attempt DBScan and GMM on the data.
 
 ### DBScan
-DBScan was also performed to see if it could give us more information compared to previous approaches. The most challenging part of DBScan we encountered was optimizing the eps value and min_components. The results from the clustering are show below.
+DBScan was also performed to see if it could give us more information compared to previous approaches. The most challenging part of DBScan we encountered was optimizing the eps value and min_components. The results from the clustering are shown below.
 
-Results for all features:<br>
-
+Results for all 8 features through PCA, top 2 principal components:<br>
 ![dbscan_all](./figures/dbscan_all.png)
+We see two strip-like clusters, probably due to the binary mode feature included. This seemed a little awkward, so we decided to try this with mode (as well as key, another discrete-valued feature) removed.
 
-Results for all features except key and mode:<br>
+Results without key and mode, leaving 6 features put through PCA, top 2 principal components:<br>
 ![dbscan_no_key_mode](./figures/dbscan_no_key_mode.png)
 
-Results for only energy vs valence:<br>
+We also decided to use only valence and energy:<br>
 ![dbscan_energy_valence](./figures/dbscan_energy_valence.png)
+(seems to be tilted since we forgot to remove PCA from this one)
 
-Again, we see not significant conclusions so we decided to try our last clustering method, GMM.
+We didn't get any satisfactory results, so we decided to try GMM.
 
 ### GMM
-Songs can convery multiple emotions and thus it was logical to apply soft-clustering to our problem. When applying GMM on our initial set of features, we see the following results.
+Songs can convey a mix of emotions, so we decided to try a soft-clustering approach to our problem with GMM. Here, we arbitrarily decided to use 12 cluster centers, each one corresponding to one emotion on the emotion circle shown in the results and conclusion section.
 
+Results for all 8 features through PCA, top 2 principal components:<br>
 ![gmm_all](./figures/gmm_all.png)
 
-As we can see, there is a very obvious separation (presumable mode) and potentially the subsections are split by key (0-14). These clusters are believable but we felt that key and mode biased the data too strongly and thus we attempted GMM again without key and mode. The results are show below.
+We see the same two-strip separation. The 12 separate clusters are likely separated by key (0-11). These clusters are believable but we felt that those features would make our classification too reliant on mode and key. We wanted to see what our clusters would look like without key and mode.
 
 ![gmm_all](./figures/gmm_all_no_key_mode.png)
 
-This looks a lot better but we approach GMM again but only looking at **energy vs valence**. The results are very promising because they coincide with expected results and allow us to label our clusters. The results is show below. 
+This looks a lot better but we approach GMM again but only looking at **energy vs valence**. The results are very promising because they coincide with expected results and allow us to label our clusters. The results are shown below. 
 
 ![gmm_all](./figures/gmm_energy_valence.png)
 
 
 ## Unsupervised Learning Results and Conclusion
-GMM seems to provide the most promising clustering (especially energy vs vaence) and would allow us to assign clusters to the following emotion circle.
+GMM seems to provide the most promising clustering (especially energy vs valence) and would allow us to assign clusters to the following emotion circle.
 
 ![emotion_circle](./figures/emotion_circle.png)
 
-We generated csv files cooresponding to each cluster to verify any differences and assist in labeling. You can listen to examples of such below to see differences in musical emotion.
+We generated csv files corresponding to each cluster to verify any differences and assist in labeling. You can listen to examples of such below to see differences in musical emotion.
 
 
 ### Music Cluster Snippets
@@ -173,7 +184,7 @@ The unsupervised portion of our project will play an important role in determini
 The goal of our project is to be able to accurately associate songs to certain emotions that span multiple levels of intensity from calming to exciting, sleepy to energetic, and positive to negative. This will help confirm correlations we see between musical features and emotions, such as minor key songs being generally more negative and high rhythm songs as more energetic. We also hope to see if performing sentiment analysis on instrumental features are more accurate than performing lyrical analysis.
 
 ## Discussion
-The best outcome is having a model that is able to measure levels of emotions given a certain song or playlist. We can then use our model to evaluate how accurate current music streaming platform playlists are. For example, Spotify and Apple Music both have pregenerated platform playlists for workouts and studying. We could evaluate how successful these platforms are at creating their playlists and potentially suggest removal/additions to increase a playlist's performance. Our tool could also be utlizied to analyze personal/community generated playlist.
+The best outcome is having a model that is able to measure levels of emotions given a certain song or playlist. We can then use our model to evaluate how accurate current music streaming platform playlists are. For example, Spotify and Apple Music both have pregenerated platform playlists for workouts and studying. We could evaluate how successful these platforms are at creating their playlists and potentially suggest removal/additions to increase a playlist's performance. Our tool could also be utilized to analyze personal/community generated playlist.
 
 Our applications could stretch far beyond just songs. We could apply our model to films by looking at the effectiveness of the background music of a scene in invoking a certain emotion. Marketers could use such a model to determine what song/tracks should be used in trailers or product commercials.
 
