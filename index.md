@@ -132,6 +132,13 @@ This looks a lot better but we approach GMM again but only looking at **energy v
 
 ![gmm_all](./figures/gmm_energy_valence.png)
 
+**Note*: For the clustering graphs above for GMM, they are purely for helping visualize emerging clusters after performing GMM. Since GMM is a soft clustering algorithm, the probability distribution looks something like this for one of the datapoints. 
+
+|  Cluster ID |    0    |     1    |    2    |   3   |     4    |    5    |  6  |   7   |   8  |     9    |    10   |   11   |
+|:-----------:|:-------:|:--------:|:-------:|:-----:|:--------:|:-------:|:---:|:-----:|:----:|:--------:|:-------:|:------:|
+| Probability | 3.66e-5 | 1.53e-10 | 0.00334 | 0.059 | 2.36e-17 | 2.26e-8 | 0.2 | 0.052 | 0.68 | 5.18e-13 | 1.45e-7 | 0.0078 |
+
+This information is valuable to us because we believe songs can exemplify muliple emotions and it would make sense that one song could pertain to mutliple clusters.
 
 ## Unsupervised Learning Results and Conclusion
 GMM seems to provide the most promising clustering (especially energy vs valence) and would allow us to assign clusters to the following emotion circle.
@@ -164,10 +171,34 @@ The results are promising as when listening to the music clips, we observe disti
 
 We see density along the positive diagonal noting that songs tend to match their levels and not too many songs are created with unique profiles as outliers. From here, we will label our clusters with a general emotion which will assist in our supervised learning portion.
 
-### Supervised Learning Plans KNN Classification
-The unsupervised portion of our project will play an important role in determining labels for our supervised algorithm. We plan on using KNN Classification to determine what emotions an unknown song conveys.
+## Supervised Learning Results
+The unsupervised portion of our project will play an important role in determining labels for our supervised algorithm. We initially planned on using just KNN Classification to determine what emotions an unknown song conveys, but we have expanded to other techniques such as Decision Trees, Random Forests, and SVM Classification.
 
 With our unsupervised results, we can set a ground truth for our dataset. Our plan will be to run our GMM model on the whole dataset and train our Supervised model on half of this dataset. We will use the other half as testing data and since we have labels for the entire dataset, we can easily confirm our results.
+
+### SVM
+The first classification we tried looking into was simply if we could differentiate **negative** and **positive** feeling songs. To start, we again only looked at *energy vs valence*. To determine our two classes, we labeled our clusters from our unsupervised learning algorithm based on their energy and valence values, referring to the emotion circle, as well as listening to songs in each class.
+
+We decided to train on 70% of our data and use the remaining 30% to test. The datapoints for each respective class is plotted below.
+
+![svm_plot](figures/svm_plot.png)
+
+As we can see, the data is only slightly linearly separable. Thus **RBF** was selected as the kernal. We started of with a gamma of 0.1 an noticed that as we increased the gamma, the better the scores became. Below are the plots for accuracy, recall, and precision with respect to gamma values. 
+
+Accuracy vs. Gamma
+![svm_accuracy](figures/svm_accuracy.png)
+
+Recall vs. Gamma
+![svm_recall](figures/svm_recall.png)
+
+Precision vs. Gamma
+![svm_precision](figures/svm_precision.png)
+
+We want to penalize misclassification as if we were to utilize this as a tool, we don't want to mix in a negative sounding song into a positive playlist especially if there are overwelming positive attributed songs.
+
+Thus we ultimately settled on a gamma of around 35 as the performance plateaus after that.
+
+With SVM we were able to classify songs as positive or negative with great efficacy but the example is somewhat simple when looking at purely energy vs valence. Thus we continued to explore other options.
 
 # Touchpoint 1 Items
 The items below are for touchpoint 1, some may still be applicable but the content above reports on the midterm progress
