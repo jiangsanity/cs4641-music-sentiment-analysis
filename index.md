@@ -164,7 +164,7 @@ The following clips are used for educational purposes. The following links will 
 [Cluster 10 Song Clip0](https://drive.google.com/file/d/1yODw4yaGGe29XYh9CVfDcEE6zGCkMcit/view?usp=sharing)
 
 
-### Discussion
+### Discussion - Unsupervised
 The results are promising as when listening to the music clips, we observe distinct differences in moods (subjectively) as a team. It is interesting to note that when looking at simply energy and valence plotted without clustering...
 
 ![energy_vs_valence](figures/e_vs_v.png)
@@ -199,6 +199,21 @@ We want to penalize misclassification as if we were to utilize this as a tool, w
 Thus we ultimately settled on a gamma of around 35 as the performance plateaus after that.
 
 With SVM we were able to classify songs as positive or negative with great efficacy but the example is somewhat simple when looking at purely energy vs valence. Thus we continued to explore other options.
+
+### Class Distribution
+For our remaining supervised learning algorithms, our class distrubtion is as follows.
+
+| Class       | Excited | Gentle | Happy | Jazz-adjacent | Mellow | Peaceful | Relaxed | Rhythmic | Sad   | Slick | Tender | Upbeat |
+|-------------|---------|--------|-------|---------------|--------|----------|---------|----------|-------|-------|--------|--------|
+| Distrubtion | 0.11    | 0.052  | 0.045 | 0.112         | 0.104  | 0.092    | 0.081   | 0.059    | 0.042 | 0.096 | 0.087  | 0.12   |
+
+### KNN Classification
+
+### Decision Trees
+
+### Random Forests
+
+### Discussion - Supervised
 
 # Touchpoint 1 Items
 The items below are for touchpoint 1, some may still be applicable but the content above reports on the midterm progress
