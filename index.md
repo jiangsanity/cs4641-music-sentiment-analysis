@@ -6,9 +6,16 @@ Music drives our lives by setting a narrative tone. From Hollywood productions t
 ## Objective
 The project objective is to relate instrumental elements of music with the emotions they convey, providing a breakdown of the emotional composition of a set of music samples. In the past, this is accomplished using lyrics. Instead, we emphasize the importance of instrumental elements in the emotion a musical piece conveys. These elements include timbre, rhythm, melody, valence, arousal, and musical key.
 
-# Touchpoint 2
+## Expected Results
+The goal of our project is to be able to accurately associate songs to certain emotions that span multiple levels of intensity from calming to exciting, sleepy to energetic, and positive to negative. This will help confirm correlations we see between musical features and emotions, such as minor key songs being generally more negative and high rhythm songs as more energetic. We also hope to see if performing sentiment analysis on instrumental features are more accurate than performing lyrical analysis.
 
-## Data
+The best outcome is having a model that is able to measure levels of emotions given a certain song or playlist. We can then use our model to evaluate how accurate current music streaming platform playlists are. For example, Spotify and Apple Music both have pregenerated platform playlists for workouts and studying. We could evaluate how successful these platforms are at creating their playlists and potentially suggest removal/additions to increase a playlist's performance. Our tool could also be utilized to analyze personal/community generated playlist.
+
+Our applications could stretch far beyond just songs. We could apply our model to films by looking at the effectiveness of the background music of a scene in invoking a certain emotion. Marketers could use such a model to determine what song/tracks should be used in trailers or product commercials.
+
+Currently our project only looks at the instrumentals but for the next steps in creating a more effective model would include incorporating lyrical analysis. This could help enhance our results and also account for our "musical sarcasm" problem of positive instrumentals with negative lyrics.
+
+## Unsupervised Learning
 We plan to look at the following datasets (and will consider more if needed).
 - [Spotify Tracks API](https://developer.spotify.com/documentation/web-api/reference/tracks/get-audio-analysis/)
 - [Kaggle 160k Song Dataset](https://www.kaggle.com/yamaerenay/spotify-dataset-19212020-160k-tracks)
@@ -138,7 +145,7 @@ This looks a lot better but we approach GMM again but only looking at **energy v
 |:-----------:|:-------:|:--------:|:-------:|:-----:|:--------:|:-------:|:---:|:-----:|:----:|:--------:|:-------:|:------:|
 | Probability | 3.66e-5 | 1.53e-10 | 0.00334 | 0.059 | 2.36e-17 | 2.26e-8 | 0.2 | 0.052 | 0.68 | 5.18e-13 | 1.45e-7 | 0.0078 |
 
-This information is valuable to us because we believe songs can exemplify muliple emotions and it would make sense that one song could pertain to mutliple clusters.
+This information is valuable to us because we believe songs can exemplify multiple emotions and it would make sense that one song could pertain to multiple clusters.
 
 ## Unsupervised Learning Results and Conclusion
 GMM seems to provide the most promising clustering (especially energy vs valence) and would allow us to assign clusters to the following emotion circle.
@@ -161,7 +168,7 @@ The following clips are used for educational purposes. The following links will 
 
 [Cluster 8 Song Clip](https://drive.google.com/file/d/1vnPJs-GrFQh28fpdZ5_xV0NWWRE0xBr9/view?usp=sharing)
 
-[Cluster 10 Song Clip0](https://drive.google.com/file/d/1yODw4yaGGe29XYh9CVfDcEE6zGCkMcit/view?usp=sharing)
+[Cluster 10 Song Clip](https://drive.google.com/file/d/1yODw4yaGGe29XYh9CVfDcEE6zGCkMcit/view?usp=sharing)
 
 
 ### Discussion - Unsupervised
@@ -183,7 +190,7 @@ We decided to train on 70% of our data and use the remaining 30% to test. The da
 
 ![svm_plot](figures/svm_plot.png)
 
-As we can see, the data is only slightly linearly separable. Thus **RBF** was selected as the kernal. We started of with a gamma of 0.1 an noticed that as we increased the gamma, the better the scores became. Below are the plots for accuracy, recall, and precision with respect to gamma values. 
+As we can see, the data is only slightly linearly separable. Thus **RBF** was selected as the kernel. We started of with a gamma of 0.1 an noticed that as we increased the gamma, the better the scores became. Below are the plots for accuracy, recall, and precision with respect to gamma values. 
 
 Accuracy vs. Gamma
 ![svm_accuracy](figures/svm_accuracy.png)
@@ -194,20 +201,18 @@ Recall vs. Gamma
 Precision vs. Gamma
 ![svm_precision](figures/svm_precision.png)
 
-We want to penalize misclassification as if we were to utilize this as a tool, we don't want to mix in a negative sounding song into a positive playlist especially if there are overwelming positive attributed songs.
+We want to penalize misclassification as if we were to utilize this as a tool, we don't want to mix in a negative sounding song into a positive playlist especially if there are overwhelming positive attributed songs.
 
 Thus we ultimately settled on a gamma of around 35 as the performance plateaus after that.
 
 With SVM we were able to classify songs as positive or negative with great efficacy but the example is somewhat simple when looking at purely energy vs valence. Thus we continued to explore other options.
 
 ### Class Distribution
-For our remaining supervised learning algorithms, our class distrubtion is as follows.
+For our remaining supervised learning algorithms, our class distribution is as follows.
 
 | Class       | Excited | Gentle | Happy | Jazz-adjacent | Mellow | Peaceful | Relaxed | Rhythmic | Sad   | Slick | Tender | Upbeat |
 |-------------|---------|--------|-------|---------------|--------|----------|---------|----------|-------|-------|--------|--------|
-| Distrubtion | 0.11    | 0.052  | 0.045 | 0.112         | 0.104  | 0.092    | 0.081   | 0.059    | 0.042 | 0.096 | 0.087  | 0.12   |
-
-### KNN Classification
+| Distribution | 0.11    | 0.052  | 0.045 | 0.112         | 0.104  | 0.092    | 0.081   | 0.059    | 0.042 | 0.096 | 0.087  | 0.12   |
 
 ### Decision Trees
 Decision trees were one of the classifiers we tried. The feeling of a song can depend on many different factors that may not be linearly separable, so we decided that a decision tree's branching nature would be a good fit to model that.
@@ -255,7 +260,11 @@ With 12 layers, the resulting overall accuracy was ~87.3%, which is better than 
 | tender        | 0.839     | 0.851  |
 | upbeat        | 0.875     | 0.830  |
 
-The class "slick" has the highest precision, while the class "sad" has the highest recall. Precision of a class measures the proportion of elements correctly predicted to be that class out of all of the data points that were predicted to be that class, or (true positives / true positives + false positives). It seems like the decision tree is better at finding all of the songs labeled "slick" in the dataset than the other classes. The recall for "slick" isn't the lowest, but it's also not the 
+The class "slick" has the highest precision, while the class "sad" has the highest recall.
+Precision of a class measures the proportion of elements correctly predicted to be that class out of all of the data points that were predicted to be that class, or (true positives / true positives + false positives). It seems like the decision tree is better at finding all of the songs labeled "slick" in the dataset than the other classes. The recall for "slick" isn't the lowest, but it's also not the highest. Or, to speak in an analogy, the net we cast for "slick" songs is catching most of them, but we also seem to be erroneously catching other classes within that net.
+
+Recall of a class measures the proportion of elements correctly predicted out of all of the actual positives for that class, or (true positives / true positives + false negatives). On average, songs that we labeled as "sad" for our ground truth in this dataset tend to have low valence and low energy, and high acousticness. It's possible that these factors are very much correlated with sad songs, and as such are easily picked out by the decision tree as unmistakably sad. However, the precision for "sad" is quite compared to the other clusters, which means while we are quite sure that the songs in this cluster are sad, we aren't doing as good of a job picking out all of the songs labeled as sad in the entire dataset.
+
 
 ### Random Forests
 Because of the promising results from our Decision Tree implementation, we decided to try out Random Forests as well. The data used was similar as before with scaled features (which ultimately did not change much of the metrics). For random forests, the features used again were as following...
@@ -268,7 +277,7 @@ Because of the promising results from our Decision Tree implementation, we decid
   - "key",
   - "mode"
 
-The calculated entropy and information gain was used as the criteria to evaluate our splits for our estimators. Various amounts of estimators were attemped. In our findings, we noticed that increasing our count to more than 50 estimators would only marginally improve our metrics. (accuracy, precision, and recall) For example, increasing from 50 to 100 estimators resulted in only a 2% increase in accuracy.
+The calculated entropy and information gain was used as the criteria to evaluate our splits for our estimators. Various amounts of estimators were attempted. In our findings, we noticed that increasing our count to more than 50 estimators would only marginally improve our metrics. (accuracy, precision, and recall) For example, increasing from 50 to 100 estimators resulted in only a 2% increase in accuracy.
 
 The following links are our random forest results with different estimators. The images are again too large to be shown here.
 
@@ -302,11 +311,15 @@ The results for each cluster can be visualized with the following table.
 |    Peaceful    |   0.866   |  0.844 |   0.855  |   1393  |
 |    Rhythmic    |   0.912   |  0.926 |   0.919  |   921   |
 
-Overall our results for random forest didn't give us more insight as the performace was comparable to decision trees with more estimators and less depth.
+Overall our results for random forest didn't give us more insight as the performance was comparable to decision trees with more estimators and less depth.
 
 ### Discussion - Supervised
+The regular decision tree achieved an overall accuracy of ~87.3% with a max depth of 12, and the random forest achieved an overall accuracy of ~88% with 50 trees each with a max depth of 8. Moreover, it seems that the precision and recall scores for each category were, on average, higher with the random forest than with the decision tree. We know that ensemble methods like decision trees tend to perform better than single, complex models like our decision tree, so these results seem consistent.
 
-# Touchpoint 1 Items
+# Conclusion
+These results show promising accuracy and precision/recall scores for the supervised models used. Accuracy for both was better than guesswork.
+
+<!-- # Touchpoint 1 Items
 The items below are for touchpoint 1, some may still be applicable but the content above reports on the midterm progress
 
 ## Planned Methods and Algorithms
@@ -315,17 +328,7 @@ We plan on using both unsupervised and supervised algorithms to reveal the relat
 GMM Clustering will be used on datasets to cluster closely related emotional activations of songs. We will start out with general properties such as "happy" or "sad" but will expand out clusters to encapsulate more emotions.
 
 ### Supervised - KNN Classification
-The unsupervised portion of our project will play an important role in determining labels for our supervised algorithm. We plan on using KNN Classification to determine what emotions an unknown song conveys.
-
-## Expected Results
-The goal of our project is to be able to accurately associate songs to certain emotions that span multiple levels of intensity from calming to exciting, sleepy to energetic, and positive to negative. This will help confirm correlations we see between musical features and emotions, such as minor key songs being generally more negative and high rhythm songs as more energetic. We also hope to see if performing sentiment analysis on instrumental features are more accurate than performing lyrical analysis.
-
-## Discussion
-The best outcome is having a model that is able to measure levels of emotions given a certain song or playlist. We can then use our model to evaluate how accurate current music streaming platform playlists are. For example, Spotify and Apple Music both have pregenerated platform playlists for workouts and studying. We could evaluate how successful these platforms are at creating their playlists and potentially suggest removal/additions to increase a playlist's performance. Our tool could also be utilized to analyze personal/community generated playlist.
-
-Our applications could stretch far beyond just songs. We could apply our model to films by looking at the effectiveness of the background music of a scene in invoking a certain emotion. Marketers could use such a model to determine what song/tracks should be used in trailers or product commercials.
-
-Currently our project only looks at the instrumentals but for the next steps in creating a more effective model would include incorporating lyrical analysis. This could help enhance our results and also account for our "musical sarcasm" problem of positive instrumentals with negative lyrics.
+The unsupervised portion of our project will play an important role in determining labels for our supervised algorithm. We plan on using KNN Classification to determine what emotions an unknown song conveys. -->
 
 ## References
 - [Machine Recognition of Music Emotion: A Review](https://www.researchgate.net/publication/254004106_Machine_Recognition_of_Music_Emotion_A_Review)
