@@ -210,6 +210,52 @@ For our remaining supervised learning algorithms, our class distrubtion is as fo
 ### KNN Classification
 
 ### Decision Trees
+Decision trees were one of the classifiers we tried. The feeling of a song can depend on many different factors that may not be linearly separable, so we decided that a decision tree's branching nature would be a good fit to model that.
+
+For example, while sad songs are generally of low valence and low energy, a peaceful song may be more complex -- it could have low energy which lends it its soothing nature, but could potentially have a wider range of valence, perhaps from mid to high valence. Other types of songs could have more complicated relationships between these and the other 6 features we chose. We felt that the way a decision tree splits each feature into ranges through branching paths could "suss out" these relationships.
+
+Decision trees are also nice in visualizations, and seeing which features are split and where provide interesting insights into the data. For a decision tree this complex, it can be a bit unwieldy, but interesting nonetheless.
+
+#### Visualization
+Visualization of the entire tree is quite hard with 12 layers. The best we could manage and have it still be somewhat readable is truncating the visualization to 6 layers -- any more and the leaf nodes bunch up more than they already are. The resulting image is quite wide:
+
+[Decision Tree Visual (too large to fit on page)](https://drive.google.com/file/d/17vg-ZgkKr3dTBIGE92IhQWoJ5n8kRN-A/view?usp=sharing)
+
+Each node is color coded by its majority class, and we can see the bands of color form as the data points are split. If you take a look at the svg, you can see more clearly the attributes that the tree is splitting on. The first attribute to be split is mode, which makes sense given that it is either 1 or a 0, and our unsupervised portion of the project split the dataset into two distinct clusters based on this.
+
+The very next split is on acousticness, which was interesting to see as one might expect the energy or valence (general positivity) of a song to matter more. Acousticness measures the prevalence of acoustic instruments in the song over electric instruments and sounds. With that in mind, it does make sense that acousticness would play a role in the general feeling of a song -- more tender, emotional songs may opt for acoustic instruments over electronic instruments (but not always!)
+
+Further down the tree, we see splits on attributes such as energy, valence, and danceability, as well as more splits on acousticness.
+
+#### Results
+We ran our decision tree with a max layer of 12 and used entropy to split. We started with 7 layers and increased the number from there to see how our accuracy would be affected:
+
+7 layers: ~80.9%
+9 layers: ~84.6%
+12 layers: ~87.3%
+15 layers: ~87.9%
+
+We see decent increases in accuracy up until 15 layers. We decided to stick with 12 layers since the increase in accuracy from there was miniscule, and 15 layers took quite a while to run.
+
+With 12 layers, the resulting overall accuracy was ~87.3%, which is better than our baseline guess performance of ~12%. Here are the scores for precision and recall for each class:
+
+
+| Class         | Precision | Recall |
+|---------------|-----------|--------|
+| excited       | 0.862     | 0.868  |
+| gentle        | 0.782     | 0.871  |
+| happy         | 0.847     | 0.842  |
+| jazz-adjacent | 0.856     | 0.980  |
+| mellow        | 0.978     | 0.875  |
+| peaceful      | 0.853     | 0.850  |
+| relaxed       | 0.844     | 0.836  |
+| rhythmic      | 0.874     | 0.825  |
+| sad           | 0.807     | 0.994  |
+| slick         | 0.997     | 0.870  |
+| tender        | 0.839     | 0.851  |
+| upbeat        | 0.875     | 0.830  |
+
+The class "slick" has the highest precision, while the class "sad" has the highest recall. Precision of a class measures the proportion of elements correctly predicted to be that class out of all of the data points that were predicted to be that class, or (true positives / true positives + false positives). It seems like the decision tree is better at finding all of the songs labeled "slick" in the dataset than the other classes. The recall for "slick" isn't the lowest, but it's also not the 
 
 ### Random Forests
 
