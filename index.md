@@ -258,6 +258,50 @@ With 12 layers, the resulting overall accuracy was ~87.3%, which is better than 
 The class "slick" has the highest precision, while the class "sad" has the highest recall. Precision of a class measures the proportion of elements correctly predicted to be that class out of all of the data points that were predicted to be that class, or (true positives / true positives + false positives). It seems like the decision tree is better at finding all of the songs labeled "slick" in the dataset than the other classes. The recall for "slick" isn't the lowest, but it's also not the 
 
 ### Random Forests
+Because of the promising results from our Decision Tree implementation, we decided to try out Random Forests as well. The data used was similar as before with scaled features (which ultimately did not change much of the metrics). For random forests, the features used again were as following...
+  - "acousticness", 
+  - "danceability",
+  - "energy",
+  - "valence",
+  - "tempo",
+  - "loudness",
+  - "key",
+  - "mode"
+
+The calculated entropy and information gain was used as the criteria to evaluate our splits for our estimators. Various amounts of estimators were attemped. In our findings, we noticed that increasing our count to more than 50 estimators would only marginally improve our metrics. (accuracy, precision, and recall) For example, increasing from 50 to 100 estimators resulted in only a 2% increase in accuracy.
+
+The following links are our random forest results with different estimators. The images are again too large to be shown here.
+
+[Random Forest Estimator-0](https://drive.google.com/file/d/1THbwrmBtIOLhFSfp0IhYGf34OWzEd0w-/view?usp=sharing)
+
+[Random Forest Estimator-1](https://drive.google.com/file/d/1CSJQ69toj84heezK54bkiSXpgfCaTYZy/view?usp=sharing)
+
+[Random Forest Estimator-5](https://drive.google.com/file/d/1N5U_heqS6tm4c0YwvmKh1Mt6QdqE_E0c/view?usp=sharing)
+
+Our **max depth** value of our estimators was set to 8 to utilize the number of individuals rather than the number of layers of each estimator. This achieved an accuracy of 88%. Ultimately, increasing the number of estimators improved our accuracy. The maximum accuracy that was achieved was 94% with a **max depth** of 20. The following chart shows our evaluation results.
+
+![Random_forest_metrics](figures/random_forest_metrics.png)
+
+Characteristic Results
+![random_forest_characteristics](figures/random_forest_characteristics.png)
+
+The results for each cluster can be visualized with the following table.
+|  Cluster Name  | Precision | Recall | F1-Score | Support |
+|:--------------:|:---------:|:------:|:--------:|:-------:|
+| Jazz- Adjacent |    0.88   |  0.92  |   0.90   |   1654  |
+|     Mellow     |    0.95   |  0.92  |   0.93   |   1600  |
+|      Happy     |    0.89   |  0.88  |   0.89   |   680   |
+|      Slick     |    0.94   |  0.98  |   0.96   |   1480  |
+|     Relaxed    |    0.88   |  0.84  |   0.86   |   1254  |
+|       Sad      |    0.95   |  0.91  |   0.93   |   615   |
+|     Upbeat     |   0.849   |  0.847 |   0.848  |   1831  |
+|     Excited    |   0.849   |  0.897 |   0.873  |   1676  |
+|     Tender     |   0.863   |  0.852 |   0.858  |   1375  |
+|     Gentle     |   0.903   |  0.846 |   0.873  |   813   |
+|    Peaceful    |   0.866   |  0.844 |   0.855  |   1393  |
+|    Rhythmic    |   0.912   |  0.926 |   0.919  |   921   |
+
+Overall our results for random forest didn't give us more insight as the performace was comparable to decision trees with more estimators and less depth.
 
 ### Discussion - Supervised
 
