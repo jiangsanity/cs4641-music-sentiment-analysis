@@ -286,6 +286,7 @@ Characteristic Results
 ![random_forest_characteristics](figures/random_forest_characteristics.png)
 
 The results for each cluster can be visualized with the following table.
+
 |  Cluster Name  | Precision | Recall | F1-Score | Support |
 |:--------------:|:---------:|:------:|:--------:|:-------:|
 | Jazz- Adjacent |    0.88   |  0.92  |   0.90   |   1654  |
